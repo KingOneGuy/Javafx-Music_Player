@@ -28,7 +28,7 @@ public class MediaPlayerTest extends Application {
     // Holds references to the media and mediaPlayer
     // Garbage collector will clean up otherwise
     private Media media;
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer; // MediaPlayer supports AAC, MP3, PCM, H.264/AVC, VP6
     
     @Override
     public void start(Stage primaryStage) {
