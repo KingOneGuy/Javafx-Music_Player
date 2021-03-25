@@ -21,7 +21,7 @@ import javafx.scene.media.MediaView;
 
 /**
  *
- * @author fmalapo6597
+ * @author Frans Malapo
  */
 public class MediaPlayerTest extends Application {
     
