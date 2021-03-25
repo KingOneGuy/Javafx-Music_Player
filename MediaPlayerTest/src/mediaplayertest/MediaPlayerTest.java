@@ -34,7 +34,7 @@ public class MediaPlayerTest extends Application {
     public void start(Stage primaryStage) {
         // TODO Auto-generated method stub  
         //Initialising path of the media file, replace this with your file path   
-        String path = "C:/Users/fmalapo6597/Desktop/2hu/Satori Maiden _ 3rd Eye_ Active NEETS.mp3";
+        /*String path = "C:/Users/fmalapo6597/Desktop/2hu/Satori Maiden _ 3rd Eye_ Active NEETS.mp3";
         
         //Instantiating Media class  
         media = new Media(new File(path).toURI().toString());  
@@ -43,7 +43,15 @@ public class MediaPlayerTest extends Application {
         mediaPlayer = new MediaPlayer(media);  
           
         //by setting this property to true, the audio will be played   
-        mediaPlayer.play();  
+        mediaPlayer.play();*/
+        
+        Playlist playlist = new Playlist("C:/Users/fmalapo6597/Desktop/2hu");
+        System.out.println(playlist);
+        
+        playlist.randomize();
+        
+        System.out.println(playlist);
+        
         primaryStage.setTitle("Playing Audio");  
         primaryStage.show();
     }

@@ -6,6 +6,7 @@
 package mediaplayertest;
 
 import java.io.File;
+import java.util.Random;
 
 /**
  *
@@ -14,8 +15,48 @@ import java.io.File;
 public class Playlist {
     private File songs[];
     
-    public Playlist(String folder)
+    public Playlist(String path)
     {
-        //for(int i = 0;)
+        try
+        {
+            File folder = new File(path);
+            if(!folder.isDirectory())
+            {
+               throw new IllegalArgumentException();
+            }
+            songs = folder.listFiles();
+        }
+        catch(IllegalArgumentException e)
+        {
+            System.out.println("File is not a directory");
+            e.printStackTrace();
+        }
+    }
+    
+    void randomize()
+    {
+        Random rand = new Random();
+        for(int i = 0; i < songs.length; i++)
+        {
+            int tempI = rand.nextInt(songs.length);
+            File tempF = songs[tempI];
+            
+            songs[tempI] = songs[i];
+            songs[i] = tempF;
+        }
+    }
+    
+    public String toString()
+    {
+        String output = "";
+        for(int i = 0; i < songs.length; i++)
+        {
+            output += (i+1) + ". " + songs[i].getName();
+            if(i != songs.length - 1)
+            {
+                output += "\n";
+            }
+        }
+        return output;
     }
 }
