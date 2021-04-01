@@ -45,7 +45,8 @@ public class MediaPlayerTest extends Application {
         //by setting this property to true, the audio will be played   
         mediaPlayer.play();*/
         
-        Playlist playlist = new Playlist("C:/Users/fmalapo6597/Desktop/2hu");
+        
+        Playlist playlist = new Playlist("F:/Other/Songs/2hu");
         System.out.println(playlist);
         
         playlist.randomize();

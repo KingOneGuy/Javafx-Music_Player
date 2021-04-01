@@ -21,9 +21,12 @@ public class Playlist {
     // Throws IllegalArgumentException if the path passed isn't a directory
     public Playlist(String path)
     {
+        
         try
         {
+            
             File folder = new File(path);
+            
             if(!folder.isDirectory())
             {
                throw new IllegalArgumentException();
