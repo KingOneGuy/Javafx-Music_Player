@@ -6,8 +6,8 @@
 package mediaplayertest;
 
 import java.io.File;
-import java.net.URI;
 import java.util.Random;
+import javafx.scene.media.Media;
 
 /**
  *
@@ -21,12 +21,9 @@ public class Playlist {
     // Throws IllegalArgumentException if the path passed isn't a directory
     public Playlist(String path)
     {
-        
         try
         {
-            
             File folder = new File(path);
-            
             if(!folder.isDirectory())
             {
                throw new IllegalArgumentException();
@@ -41,14 +38,15 @@ public class Playlist {
         }
     }
     
-    // Sets current to the next song in the list and returns the song's URI
+    // Sets current to the next song in the list and returns the song as Media
     // If already at the end of the list, returns null
-    URI next()
+    // @return - Next song's URI as String. Null if at end of list.
+    Media next()
     {
-        if(current+1 != songs.length)
+        if(current+1 < songs.length)
         {
             current++;
-            return songs[current].toURI();
+            return new Media(songs[current].toURI().toString());
         }
         else
         {
@@ -57,20 +55,27 @@ public class Playlist {
         }
     }
     
-    // Sets current to the previous song in the list and returns the song's URI
+    // Sets current to the previous song in the list and returns the song as Media
     // If already at the beginning of the list, returns null
-    URI previous()
+    // @return - Previous song's URI as String. Null if at beginning of list.
+    Media previous()
     {
         if(current > 0)
         {
             current--;
-            return songs[current].toURI();
+            return new Media(songs[current].toURI().toString());
         }
         else
         {
             System.out.println("Already at beginning of playlist.");
             return null;
         }
+    }
+    
+    // @return - the current song as a Media object
+    Media current()
+    {
+        return new Media(songs[current].toURI().toString());
     }
     
     // Randomize the playlist
@@ -87,6 +92,21 @@ public class Playlist {
         }
     }
     
+    
+    // @return - The song name without .mp3 extension as a String
+    String getSongName()
+    {
+        String temp = songs[current].getName();
+        return temp.substring(0, temp.lastIndexOf("."));
+    }
+    
+    // Returns a string of the entire list of songs in list format
+    // Ex:
+    //   1. Song1.mp3
+    //   2. Song2.mp3
+    //   3. Song3.mp3
+    // @return - String value of list of songs in numbered format
+    @Override
     public String toString()
     {
         String output = "";

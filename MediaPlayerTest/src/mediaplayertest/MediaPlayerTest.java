@@ -14,6 +14,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.File;
+import javafx.geometry.Insets;
+import javafx.scene.layout.HBox;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -25,36 +27,63 @@ import javafx.scene.media.MediaView;
  */
 public class MediaPlayerTest extends Application {
     
-    // Holds references to the media and mediaPlayer
+    // Holds references to mediaPlayer
     // Garbage collector will clean up otherwise
-    private Media media;
-    private MediaPlayer mediaPlayer; // MediaPlayer supports AAC, MP3, PCM, H.264/AVC, VP6
+    private static MediaPlayer mediaPlayer; // MediaPlayer supports AAC, MP3, PCM, H.264/AVC, VP6
     
     @Override
     public void start(Stage primaryStage) {
         // TODO Auto-generated method stub  
         //Initialising path of the media file, replace this with your file path   
-        /*String path = "C:/Users/fmalapo6597/Desktop/2hu/Satori Maiden _ 3rd Eye_ Active NEETS.mp3";
+        String path = "C:/Users/fmalapo6597/Desktop/2hu/Satori Maiden _ 3rd Eye_ Active NEETS.mp3";
         
         //Instantiating Media class  
-        media = new Media(new File(path).toURI().toString());  
+        Media media = new Media(new File(path).toURI().toString());  
           
         //Instantiating MediaPlayer class   
         mediaPlayer = new MediaPlayer(media);  
           
         //by setting this property to true, the audio will be played   
-        mediaPlayer.play();*/
+        mediaPlayer.play();
         
-        
-        Playlist playlist = new Playlist("F:/Other/Songs/2hu");
-        System.out.println(playlist);
-        
+        Playlist playlist = new Playlist("C:/Users/fmalapo6597/Desktop/2hu");
         playlist.randomize();
         
-        System.out.println(playlist);
+        // Next Button
+        Button nextButton = new Button("Next");
         
-        primaryStage.setTitle("Playing Audio");  
+        nextButton.setOnAction(value -> {
+            changeSong(playlist.next());
+            System.out.println("Now playing: " + playlist.getSongName());
+        });
+        
+        // Previous Button
+        Button previousButton = new Button("Previous");
+        
+        previousButton.setOnAction(value -> {
+            changeSong(playlist.previous());
+            System.out.println("Now playing: " + playlist.getSongName());
+        });
+        
+        // HBox
+        HBox hbox = new HBox(previousButton, nextButton);
+        hbox.setMargin(previousButton, new Insets(0, 50, 0, 0));
+        
+        // Scene setting
+        Scene scene = new Scene(hbox, 200, 100);
+        
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Playing Audio");
         primaryStage.show();
+    }
+    
+    // Changes and plays MediaPlayer's song
+    // @param - Media song to change to and play
+    private static void changeSong(Media newSong)
+    {
+        mediaPlayer.dispose();
+        mediaPlayer = new MediaPlayer(newSong);
+        mediaPlayer.play();
     }
 
     /**
