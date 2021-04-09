@@ -2,7 +2,7 @@
 A music player made in javafx
 
 To do:</br>
-  </t>Seek bar</br>
+  Seek bar</br>
   Show list of songs</br>
   Previous and next constraints</br>
 
