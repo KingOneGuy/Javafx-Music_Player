@@ -29,7 +29,7 @@ public class Playlist {
                throw new IllegalArgumentException();
             }
             songs = folder.listFiles();
-            current = songs.length - 4;
+            current = 0;
         }
         catch(IllegalArgumentException e)
         {

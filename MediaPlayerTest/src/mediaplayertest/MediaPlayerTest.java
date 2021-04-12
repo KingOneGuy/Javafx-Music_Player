@@ -15,11 +15,16 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import javafx.geometry.Insets;
+import javafx.geometry.VPos;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 /**
  *
@@ -30,24 +35,22 @@ public class MediaPlayerTest extends Application {
     // Holds references to mediaPlayer
     // Garbage collector will clean up otherwise
     private static MediaPlayer mediaPlayer; // MediaPlayer supports AAC, MP3, PCM, H.264/AVC, VP6
+    private static Playlist playlist; // Playlist of songs
     
     @Override
     public void start(Stage primaryStage) {
-        // TODO Auto-generated method stub  
-        //Initialising path of the media file, replace this with your file path   
-        String path = "C:/Users/fmalapo6597/Desktop/2hu/Satori Maiden _ 3rd Eye_ Active NEETS.mp3";
-        
-        //Instantiating Media class  
-        Media media = new Media(new File(path).toURI().toString());  
-          
-        //Instantiating MediaPlayer class   
-        mediaPlayer = new MediaPlayer(media);  
-          
-        //by setting this property to true, the audio will be played   
-        mediaPlayer.play();
-        
-        Playlist playlist = new Playlist("C:/Users/fmalapo6597/Desktop/2hu");
+        playlist = new Playlist("C:/Users/fmalapo6597/Desktop/2hu");
         playlist.randomize();
+        
+        changeSong(playlist.current());
+        
+        // Label declaration
+        // TEST VBOX VERTICAL ALIGNMENT
+        Text nowPlaying = new Text("Now playing:\n\n" + playlist.getSongName());
+        nowPlaying.setTextAlignment(TextAlignment.CENTER);
+        nowPlaying.setTextOrigin(VPos.CENTER);
+        nowPlaying.setLayoutY(20);
+        nowPlaying.setLayoutX(20);
         
         // Button declarations
         Button nextButton = new Button("Next");
@@ -59,29 +62,35 @@ public class MediaPlayerTest extends Application {
         nextButton.setOnAction(value -> {
             changeSong(playlist.next());
             
+            nowPlaying.setText("Now playing:\n\n" + playlist.getSongName());
+            
             // Button visibility
             nextButton.setVisible(!playlist.atEnd());
             previousButton.setVisible(true);
-            
-            System.out.println("Now playing: " + playlist.getIndex() + ". " + playlist.getSongName());
         });
         
         previousButton.setOnAction(value -> {
             changeSong(playlist.previous());
             
+            nowPlaying.setText("Now playing:\n\n" + playlist.getSongName());
+            
             // Button visibility
             previousButton.setVisible(!playlist.atBeginning());
             nextButton.setVisible(true);
-            
-            System.out.println("Now playing: " + playlist.getIndex() + ". " + playlist.getSongName());
         });
         
         // HBox
         HBox hbox = new HBox(previousButton, nextButton);
+        hbox.setLayoutY(40);
         hbox.setMargin(previousButton, new Insets(0, 50, 0, 0));
         
+        // Root pane
+        Pane root = new Pane();
+        root.getChildren().add(nowPlaying);
+        root.getChildren().add(hbox);
+        
         // Scene setting
-        Scene scene = new Scene(hbox, 200, 100);
+        Scene scene = new Scene(root, 200, 100);
         
         primaryStage.setScene(scene);
         primaryStage.setTitle("Playing Audio");
@@ -92,9 +101,14 @@ public class MediaPlayerTest extends Application {
     // @param - Media song to change to and play
     private static void changeSong(Media newSong)
     {
-        mediaPlayer.dispose();
+        if(mediaPlayer != null)
+        {
+            mediaPlayer.dispose();
+        }
         mediaPlayer = new MediaPlayer(newSong);
         mediaPlayer.play();
+        
+        System.out.println("Now playing: " + playlist.getIndex() + ". " + playlist.getSongName());
     }
 
     /**
