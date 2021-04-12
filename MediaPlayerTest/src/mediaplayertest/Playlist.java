@@ -29,7 +29,7 @@ public class Playlist {
                throw new IllegalArgumentException();
             }
             songs = folder.listFiles();
-            current = 0;
+            current = songs.length - 4;
         }
         catch(IllegalArgumentException e)
         {
@@ -92,12 +92,29 @@ public class Playlist {
         }
     }
     
+    // @return - return current index of playlist
+    int getIndex()
+    {
+        return current;
+    }
     
     // @return - The song name without .mp3 extension as a String
     String getSongName()
     {
         String temp = songs[current].getName();
         return temp.substring(0, temp.lastIndexOf("."));
+    }
+    
+    // @return - Whether the current song the first song in the playlist
+    boolean atBeginning()
+    {
+        return current == 0;
+    }
+    
+    // @return - Whether the current song the last song in the playlist
+    boolean atEnd()
+    {
+        return current == songs.length - 1;
     }
     
     // Returns a string of the entire list of songs in list format

@@ -49,20 +49,31 @@ public class MediaPlayerTest extends Application {
         Playlist playlist = new Playlist("C:/Users/fmalapo6597/Desktop/2hu");
         playlist.randomize();
         
-        // Next Button
+        // Button declarations
         Button nextButton = new Button("Next");
         
+        Button previousButton = new Button("Previous");
+        previousButton.setVisible(false);
+        
+        // Button actions
         nextButton.setOnAction(value -> {
             changeSong(playlist.next());
-            System.out.println("Now playing: " + playlist.getSongName());
+            
+            // Button visibility
+            nextButton.setVisible(!playlist.atEnd());
+            previousButton.setVisible(true);
+            
+            System.out.println("Now playing: " + playlist.getIndex() + ". " + playlist.getSongName());
         });
-        
-        // Previous Button
-        Button previousButton = new Button("Previous");
         
         previousButton.setOnAction(value -> {
             changeSong(playlist.previous());
-            System.out.println("Now playing: " + playlist.getSongName());
+            
+            // Button visibility
+            previousButton.setVisible(!playlist.atBeginning());
+            nextButton.setVisible(true);
+            
+            System.out.println("Now playing: " + playlist.getIndex() + ". " + playlist.getSongName());
         });
         
         // HBox
