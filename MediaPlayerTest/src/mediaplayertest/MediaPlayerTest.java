@@ -15,10 +15,12 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -46,11 +48,12 @@ public class MediaPlayerTest extends Application {
         
         // Label declaration
         // TEST VBOX VERTICAL ALIGNMENT
-        Text nowPlaying = new Text("Now playing:\n\n" + playlist.getSongName());
+        Text nowPlaying = new Text("Now playing:");
+        Text songName = new Text(playlist.getSongName());
         nowPlaying.setTextAlignment(TextAlignment.CENTER);
         nowPlaying.setTextOrigin(VPos.CENTER);
-        nowPlaying.setLayoutY(20);
-        nowPlaying.setLayoutX(20);
+        songName.setTextAlignment(TextAlignment.CENTER);
+        nowPlaying.setTextOrigin(VPos.CENTER);
         
         // Button declarations
         Button nextButton = new Button("Next");
@@ -62,7 +65,7 @@ public class MediaPlayerTest extends Application {
         nextButton.setOnAction(value -> {
             changeSong(playlist.next());
             
-            nowPlaying.setText("Now playing:\n\n" + playlist.getSongName());
+            songName.setText(playlist.getSongName());
             
             // Button visibility
             nextButton.setVisible(!playlist.atEnd());
@@ -72,22 +75,39 @@ public class MediaPlayerTest extends Application {
         previousButton.setOnAction(value -> {
             changeSong(playlist.previous());
             
-            nowPlaying.setText("Now playing:\n\n" + playlist.getSongName());
+            songName.setText(playlist.getSongName());
             
             // Button visibility
             previousButton.setVisible(!playlist.atBeginning());
             nextButton.setVisible(true);
         });
         
+        // Automatically play next song
+        mediaPlayer.setOnEndOfMedia(() -> {
+                changeSong(playlist.next());
+                songName.setText(playlist.getSongName());
+        });
+        
         // HBox
         HBox hbox = new HBox(previousButton, nextButton);
-        hbox.setLayoutY(40);
+        hbox.setLayoutY(50);
         hbox.setMargin(previousButton, new Insets(0, 50, 0, 0));
+        hbox.setAlignment(Pos.BASELINE_CENTER);
+        
+        // Text VBox
+        VBox vbox = new VBox(nowPlaying, songName);
+        vbox.setAlignment(Pos.BASELINE_CENTER);
+        vbox.setSpacing(10);
+        
+        // ButtonHBox + TextVBox
+        VBox vbox2 = new VBox(vbox, hbox);
+        vbox2.setAlignment(Pos.BASELINE_CENTER);
+        vbox2.setMargin(hbox, new Insets(50, 0, 0, 0));
         
         // Root pane
         Pane root = new Pane();
-        root.getChildren().add(nowPlaying);
-        root.getChildren().add(hbox);
+        root.getChildren().add(vbox2);
+        //root.getChildren().add(hbox);
         
         // Scene setting
         Scene scene = new Scene(root, 200, 100);
