@@ -12,10 +12,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.Screen;
 
 import java.io.File;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -82,11 +84,7 @@ public class MediaPlayerTest extends Application {
             nextButton.setVisible(true);
         });
         
-        // Automatically play next song
-        mediaPlayer.setOnEndOfMedia(() -> {
-                changeSong(playlist.next());
-                songName.setText(playlist.getSongName());
-        });
+        
         
         // HBox
         HBox hbox = new HBox(previousButton, nextButton);
@@ -103,6 +101,7 @@ public class MediaPlayerTest extends Application {
         VBox vbox2 = new VBox(vbox, hbox);
         vbox2.setAlignment(Pos.BASELINE_CENTER);
         vbox2.setMargin(hbox, new Insets(50, 0, 0, 0));
+        vbox2.setLayoutX(30);
         
         // Root pane
         Pane root = new Pane();
@@ -110,25 +109,49 @@ public class MediaPlayerTest extends Application {
         //root.getChildren().add(hbox);
         
         // Scene setting
-        Scene scene = new Scene(root, 200, 100);
+        Scene scene = new Scene(root, 1000, 1000);
+        
+        
         
         primaryStage.setScene(scene);
         primaryStage.setTitle("Playing Audio");
+        
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
+        primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
         primaryStage.show();
     }
     
     // Changes and plays MediaPlayer's song
-    // @param - Media song to change to and play
+    // @param - Media song to change to and play. If null, will assume that playlist has reached the end.
     private static void changeSong(Media newSong)
     {
         if(mediaPlayer != null)
         {
             mediaPlayer.dispose();
         }
-        mediaPlayer = new MediaPlayer(newSong);
-        mediaPlayer.play();
         
-        System.out.println("Now playing: " + playlist.getIndex() + ". " + playlist.getSongName());
+        if(newSong != null)
+        {
+            mediaPlayer = new MediaPlayer(newSong);
+            mediaPlayer.play();
+            
+            System.out.println("Now playing: " + playlist.getIndex() + ". " + playlist.getSongName());
+            
+            // Automatically play next song
+            mediaPlayer.setOnEndOfMedia(() -> {
+                changeSong(playlist.next());
+                songName.setText(playlist.getSongName());
+
+                // Button visibility
+                nextButton.setVisible(!playlist.atEnd());
+                previousButton.setVisible(true);
+            });
+        }
+        else
+        {
+            System.out.println("Reached end of playlist.");
+        }
     }
 
     /**
