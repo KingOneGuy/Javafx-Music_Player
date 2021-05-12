@@ -34,8 +34,8 @@ import javafx.scene.text.TextAlignment;
  *
  * @author Frans Malapo
  */
-public class MediaPlayerTest extends Application {
-    
+public class MediaPlayerTest /*extends Application*/ {
+    /*
     // Holds references to mediaPlayer
     // Garbage collector will clean up otherwise
     private static MediaPlayer mediaPlayer; // MediaPlayer supports AAC, MP3, PCM, H.264/AVC, VP6
@@ -156,9 +156,9 @@ public class MediaPlayerTest extends Application {
 
     /**
      * @param args the command line arguments
-     */
+     *
     public static void main(String[] args) {
         launch(args);
     }
-    
+    */
 }

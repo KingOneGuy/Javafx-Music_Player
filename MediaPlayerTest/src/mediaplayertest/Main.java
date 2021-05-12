@@ -32,11 +32,12 @@ public class Main extends Application {
         primaryStage.show();
     }
     
+    // Initializes music and page
     private void setUp()
     {
         music = new MusicController(new Playlist("C:/Users/fmalapo6597/Desktop/2hu"));
-        music.randomizePlaylist();
         
         page = new MusicPlayerPage(music);
+        music.setPage(page);
     }
 }

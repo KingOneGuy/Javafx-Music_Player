@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mediaplayertest;
 
 import javafx.application.Application;
@@ -31,14 +26,19 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 /**
- *
- * @author fmalapo6597
+ *  Handles the JavaFX GUI.
  */
 public class MusicPlayerPage {
-    private Text nowPlaying;
-    private Text songName;
-    private Button nextButton;
-    private Button previousButton;
+    private final int WINDOW_WIDTH = 400; // Width of window
+    private final int WINDOW_HEIGHT = 400; // Height of window
+    
+    private Text nowPlaying; // Displays "Now Playing:"
+    private Text songName; // The name of current song
+    private Button nextButton; // Button to play next song
+    private Button previousButton; // Button to play previous song
+    
+    private VBox textVBox;
+    private HBox buttonHBox;
 
     private Pane root;
     
@@ -52,8 +52,9 @@ public class MusicPlayerPage {
         // Next Button
         nextButton = new Button("Next");
         nextButton.setOnAction(value -> {
+            // Play next song
             music.playNext();
-            updateSongName(music);
+            updateSongName(music.getSongName());
             
             // Button visibility
             nextButton.setVisible(!music.playlistAtEnd());
@@ -65,22 +66,42 @@ public class MusicPlayerPage {
         previousButton.setVisible(false);
         
         previousButton.setOnAction(value -> {
+            // Play previous song
             music.playPrevious();
-            updateSongName(music);
+            updateSongName(music.getSongName());
             
             // Button visibility
             nextButton.setVisible(true);
             previousButton.setVisible(!music.playlistAtBeginning());
         });
+        
+        // Button HBox
+        buttonHBox = new HBox(previousButton, nextButton);
+        buttonHBox.setLayoutY(50);
+        buttonHBox.setMargin(previousButton, new Insets(0, 50, 0, 0));
+        buttonHBox.setAlignment(Pos.BASELINE_CENTER);
+        
+        // Text VBox
+        textVBox = new VBox(nowPlaying, songName);
+        textVBox.setAlignment(Pos.BASELINE_CENTER);
+        textVBox.setSpacing(10);
+        
+        // Root
+        root = new Pane();
+        root.getChildren().add(textVBox);
+        root.getChildren().add(buttonHBox);
     }
     
-    public void updateSongName(MusicController music)
+    // Updates songName text to display specified song name
+    // @param String - song name
+    public void updateSongName(String name)
     {
-        songName.setText(music.getSongName());
+        songName.setText(name);
     }
     
+    // @return - the page to display with dimensions defined in WINDOW_WIDTH and WINDOW_HEIGHT
     public Scene getPage()
     {
-        return new Scene(root);
+        return new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 }
