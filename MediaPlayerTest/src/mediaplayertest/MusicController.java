@@ -91,6 +91,12 @@ public class MusicController {
         return playlist.atEnd();
     }
     
+    // @return boolean - whether the playlist exists according to criteria listed in Playlist.exists()
+    boolean playlistExists()
+    {
+        return playlist.exists();
+    }
+    
     // Sets the MediaPlayer to automaticaly play the next song at song end
     // MediaPlayer will do nothing if at the end of playlist
     private void setOnEnd()

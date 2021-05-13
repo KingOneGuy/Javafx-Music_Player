@@ -15,7 +15,7 @@ import javafx.scene.media.Media;
  */
 public class Playlist {
     private File songs[]; // List of songs
-    private int current; // Array index of song currently being played 
+    private int current = 0; // Array index of song currently being played 
     
     // Initialize Playlist with the path to the directory containing the songs
     // Throws IllegalArgumentException if the path passed isn't a directory
@@ -28,19 +28,75 @@ public class Playlist {
             {
                throw new IllegalArgumentException();
             }
-            songs = folder.listFiles();
+            songs = getMP3s(folder);
             current = 0;
         }
         catch(IllegalArgumentException e)
         {
+            songs = null;
             System.out.println("File is not a directory");
             e.printStackTrace();
         }
     }
     
+    // Initialize Playlist with the direcotry containing the songs
+    // Throws IllegalArgumentException if the File passed isn't a directory
+    public Playlist(File directory)
+    {
+        try
+        {
+            if(!directory.isDirectory())
+            {
+               throw new IllegalArgumentException();
+            }
+            songs = getMP3s(directory);
+            current = 0;
+        }
+        catch(IllegalArgumentException e)
+        {
+            songs = null;
+            System.out.println("File is not a directory");
+            e.printStackTrace();
+        }
+    }
+    
+    // @param File folder - directory to get MP3s from
+    // @return File[] - the array containing only MP3s
+    // Precondition: folder is a directory
+    private static File[] getMP3s(File folder)
+    {
+        File[] output = new File[numMP3s(folder)];
+        int count = 0;
+        for(File file : folder.listFiles())
+        {
+            if(file.getName().toLowerCase().endsWith(".mp3"))
+            {
+                output[count] = file;
+                count++;
+            }
+        }
+        return output;
+    }
+    
+    // @param File folder - directory to check for MP3s
+    // @return int - the amount of MP3s within given directory
+    // Precondition: folder is a directory
+    private static int numMP3s(File folder)
+    {
+        int count = 0;
+        for(File file : folder.listFiles())
+        {
+            if(file.getName().toLowerCase().endsWith(".mp3"))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+    
     // Sets current to the next song in the list and returns the song as Media
     // If already at the end of the list, returns null
-    // @return - Next song's URI as String. Null if at end of list.
+    // @return Media - Next song as Media. Null if at end of list.
     Media next()
     {
         if(current+1 < songs.length)
@@ -57,7 +113,7 @@ public class Playlist {
     
     // Sets current to the previous song in the list and returns the song as Media
     // If already at the beginning of the list, returns null
-    // @return - Previous song's URI as String. Null if at beginning of list.
+    // @return Media - Previous song as Media. Null if at beginning of list.
     Media previous()
     {
         if(current > 0)
@@ -115,6 +171,14 @@ public class Playlist {
     boolean atEnd()
     {
         return current == songs.length - 1;
+    }
+    
+    // Meant to check if initial constructor worked properly
+    // The Playlist exists if songs is not null and has at least one song
+    // @return - whether songs array exists depending on criteria above
+    boolean exists()
+    {
+        return songs != null && songs.length >= 1;
     }
     
     // Returns a string of the entire list of songs in list format

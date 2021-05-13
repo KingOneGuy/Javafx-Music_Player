@@ -40,7 +40,7 @@ public class MusicPlayerPage {
     private VBox textVBox;
     private HBox buttonHBox;
 
-    private Pane root;
+    private StackPane root;
     
     public MusicPlayerPage(MusicController music)
     {
@@ -86,10 +86,14 @@ public class MusicPlayerPage {
         textVBox.setAlignment(Pos.BASELINE_CENTER);
         textVBox.setSpacing(10);
         
+        // Button + Text
+        
+        
         // Root
-        root = new Pane();
-        root.getChildren().add(textVBox);
-        root.getChildren().add(buttonHBox);
+        root = new StackPane();
+        root.getChildren().addAll(textVBox, buttonHBox);
+        StackPane.setAlignment(textVBox, Pos.CENTER);
+        StackPane.setAlignment(buttonHBox, Pos.CENTER);
     }
     
     // Updates songName text to display specified song name
