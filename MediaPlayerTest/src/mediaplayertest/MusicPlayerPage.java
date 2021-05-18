@@ -87,13 +87,16 @@ public class MusicPlayerPage {
         textVBox.setSpacing(10);
         
         // Button + Text
-        
+        VBox buttonAndText = new VBox(textVBox, buttonHBox);
+        buttonAndText.setMargin(textVBox, new Insets(0, 0, 30, 0));
         
         // Root
         root = new StackPane();
-        root.getChildren().addAll(textVBox, buttonHBox);
-        StackPane.setAlignment(textVBox, Pos.CENTER);
-        StackPane.setAlignment(buttonHBox, Pos.CENTER);
+        root.getChildren().addAll(buttonAndText);
+        StackPane.setAlignment(buttonAndText, Pos.CENTER);
+        //root.getChildren().addAll(textVBox, buttonHBox);
+        //StackPane.setAlignment(textVBox, Pos.CENTER);
+        //StackPane.setAlignment(buttonHBox, Pos.CENTER);
     }
     
     // Updates songName text to display specified song name
