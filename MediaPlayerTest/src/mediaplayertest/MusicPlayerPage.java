@@ -1,29 +1,15 @@
 package mediaplayertest;
 
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import javafx.stage.Screen;
 
-import java.io.File;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
-import javafx.geometry.VPos;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
 /**
  *  Handles the JavaFX GUI.
@@ -39,6 +25,7 @@ public class MusicPlayerPage {
     
     private VBox textVBox;
     private HBox buttonHBox;
+    private VBox buttonAndText;
 
     private StackPane root;
     
@@ -87,7 +74,7 @@ public class MusicPlayerPage {
         textVBox.setSpacing(10);
         
         // Button + Text
-        VBox buttonAndText = new VBox(textVBox, buttonHBox);
+        buttonAndText = new VBox(textVBox, buttonHBox);
         buttonAndText.setMargin(textVBox, new Insets(0, 0, 30, 0));
         
         // Root
