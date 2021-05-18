@@ -18,7 +18,7 @@ public class MusicController {
         this.playlist = playlist;
         playlist.randomize();
         mediaPlayer = new MediaPlayer(playlist.current());
-        this.page = page;
+        setTimeListener();
     }
     
     // Creates new MusicController using given playlist. Randomizes playlist based on given boolean.
@@ -29,7 +29,14 @@ public class MusicController {
         this.playlist = playlist;
         if(randomize) { playlist.randomize(); }
         mediaPlayer = new MediaPlayer(playlist.current());
-        this.page = page;
+        setTimeListener();
+    }
+    
+    private void setTimeListener()
+    {
+        mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+            page.updateTime(Double.toString(newValue.toSeconds()) + "/" + Double.toString(mediaPlayer.totalDurationProperty().getValue().toSeconds()));
+        });
     }
     
     // Sets the page the controller will display on. Necessary to update NowPlaying text.
@@ -52,7 +59,7 @@ public class MusicController {
     {
         mediaPlayer.dispose();
         mediaPlayer = new MediaPlayer(playlist.next());
-        setOnEnd();
+        initializeFunctions();
         mediaPlayer.play();
     }
     
@@ -63,7 +70,7 @@ public class MusicController {
     {
         mediaPlayer.dispose();
         mediaPlayer = new MediaPlayer(playlist.previous());
-        setOnEnd();
+        initializeFunctions();
         mediaPlayer.play();
     }
     
@@ -106,7 +113,14 @@ public class MusicController {
             {
                 playNext();
                 page.updateSongName(getSongName());
+                page.buttonVisibility(this);
             }
         });
+    }
+    
+    private void initializeFunctions()
+    {
+        setOnEnd();
+        setTimeListener();
     }
 }

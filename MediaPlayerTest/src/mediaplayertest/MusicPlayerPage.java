@@ -23,6 +23,9 @@ public class MusicPlayerPage {
     private Button nextButton; // Button to play next song
     private Button previousButton; // Button to play previous song
     
+    private Text currentTime;
+    private Text totalTime;
+    
     private VBox textVBox;
     private HBox buttonHBox;
     private VBox buttonAndText;
@@ -31,9 +34,14 @@ public class MusicPlayerPage {
     
     public MusicPlayerPage(MusicController music)
     {
-        // ====TEXT====
+        // ====SONG TEXT====
         nowPlaying = new Text("Now Playing:");
         songName = new Text(music.getSongName());
+        
+        // ====TIME TEXT====
+        currentTime = new Text("0:00");
+        totalTime = new Text("0:00");
+        
         
         // ====BUTTONS====
         // Next Button
@@ -43,9 +51,7 @@ public class MusicPlayerPage {
             music.playNext();
             updateSongName(music.getSongName());
             
-            // Button visibility
-            nextButton.setVisible(!music.playlistAtEnd());
-            previousButton.setVisible(true);
+            buttonVisibility(music);
         });
         
         // Previous Button
@@ -57,9 +63,7 @@ public class MusicPlayerPage {
             music.playPrevious();
             updateSongName(music.getSongName());
             
-            // Button visibility
-            nextButton.setVisible(true);
-            previousButton.setVisible(!music.playlistAtBeginning());
+            buttonVisibility(music);
         });
         
         // Button HBox
@@ -79,7 +83,7 @@ public class MusicPlayerPage {
         
         // Root
         root = new StackPane();
-        root.getChildren().addAll(buttonAndText);
+        root.getChildren().addAll(buttonAndText, currentTime);
         StackPane.setAlignment(buttonAndText, Pos.CENTER);
         //root.getChildren().addAll(textVBox, buttonHBox);
         //StackPane.setAlignment(textVBox, Pos.CENTER);
@@ -91,6 +95,21 @@ public class MusicPlayerPage {
     public void updateSongName(String name)
     {
         songName.setText(name);
+    }
+    
+    // Controls button visibility
+    // If the playlist is at the beginning, hides the previous button
+    // If the playlist is at the end, hides the next button
+    // @param MusicController music - MusicController to read playlist info from
+    public void buttonVisibility(MusicController music)
+    {
+        nextButton.setVisible(!music.playlistAtEnd());
+        previousButton.setVisible(!music.playlistAtBeginning());
+    }
+    
+    public void updateTime(String time)
+    {
+        currentTime.setText(time);
     }
     
     // @return - the page to display with dimensions defined in WINDOW_WIDTH and WINDOW_HEIGHT
