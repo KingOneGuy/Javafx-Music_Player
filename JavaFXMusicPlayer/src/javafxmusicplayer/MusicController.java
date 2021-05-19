@@ -1,4 +1,4 @@
-package mediaplayertest;
+package javafxmusicplayer;
 
 import javafx.scene.media.MediaPlayer;
 

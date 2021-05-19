@@ -1,4 +1,4 @@
-package mediaplayertest;
+package javafxmusicplayer;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
