@@ -34,6 +34,7 @@ public class Main extends Application {
         }
         
         primaryStage.setScene(page.getPage());
+        primaryStage.setTitle("Music Player");
         primaryStage.show();
     }
     

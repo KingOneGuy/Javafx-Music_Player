@@ -116,7 +116,7 @@ public class MusicPlayerPage {
     
     public void setSongLength(String songLength)
     {
-        totalTime.setText(songLength);
+        if(!songLength.equals("0:00")) { totalTime.setText(songLength); }
     }
     
     // Controls button visibility
