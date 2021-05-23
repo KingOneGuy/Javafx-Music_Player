@@ -1,6 +1,7 @@
 package javafxmusicplayer;
 
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 /**
  *  Controls the MediaPlayer and keeps track of playlist.
@@ -32,13 +33,6 @@ public class MusicController {
         setTimeListener();
     }
     
-    private void setTimeListener()
-    {
-        mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
-            page.updateTime(Double.toString(newValue.toSeconds()) + "/" + Double.toString(mediaPlayer.totalDurationProperty().getValue().toSeconds()));
-        });
-    }
-    
     // Sets the page the controller will display on. Necessary to update NowPlaying text.
     // @param MusicPlayerPage page - page to be set
     public void setPage(MusicPlayerPage page)
@@ -55,7 +49,7 @@ public class MusicController {
     // Plays the next song and automatically updates position in playlist
     // Reinitializes setOnEnd()
     // Precondition: Not at the end of playlist
-    public void playNext()
+    void playNext()
     {
         mediaPlayer.dispose();
         mediaPlayer = new MediaPlayer(playlist.next());
@@ -66,7 +60,7 @@ public class MusicController {
     // Plays the previous song and automatically updates position in playlist
     // Reinitializes setOnEnd()
     // Precondition: Not at the beginning of playlist
-    public void playPrevious()
+    void playPrevious()
     {
         mediaPlayer.dispose();
         mediaPlayer = new MediaPlayer(playlist.previous());
@@ -75,25 +69,25 @@ public class MusicController {
     }
     
     // @return String - name of the current song playing
-    public String getSongName()
+    String getSongName()
     {
         return playlist.getSongName();
     }
     
     // Randomizes playlist
-    public void randomizePlaylist()
+    void randomizePlaylist()
     {
         playlist.randomize();
     }
     
     // @return boolean - whether the playlist is at the beginning
-    public boolean playlistAtBeginning()
+    boolean playlistAtBeginning()
     {
         return playlist.atBeginning();
     }
     
     // @return boolean - whether the playlist is at the end
-    public boolean playlistAtEnd()
+    boolean playlistAtEnd()
     {
         return playlist.atEnd();
     }
@@ -104,6 +98,17 @@ public class MusicController {
         return playlist.exists();
     }
     
+    String getSongLength()
+    {
+        return durationToString(mediaPlayer.getTotalDuration());
+    }
+    
+    private String durationToString(Duration duration)
+    {
+        int totalSeconds = (int) duration.toSeconds();
+        return (totalSeconds / 60) + ":" + (totalSeconds % 60);
+    }
+    
     // Sets the MediaPlayer to automaticaly play the next song at song end
     // MediaPlayer will do nothing if at the end of playlist
     private void setOnEnd()
@@ -112,9 +117,17 @@ public class MusicController {
             if(!playlistAtEnd())
             {
                 playNext();
-                page.updateSongName(getSongName());
+                page.setSongName(getSongName());
+                page.updateSong(getSongName(), getSongLength());
                 page.buttonVisibility(this);
             }
+        });
+    }
+    
+    private void setTimeListener()
+    {
+        mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+            page.updateCurrentTime(durationToString(newValue));
         });
     }
     

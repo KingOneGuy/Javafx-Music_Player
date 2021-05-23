@@ -25,10 +25,12 @@ public class MusicPlayerPage {
     
     private Text currentTime;
     private Text totalTime;
+    private Text timeSlash;
     
     private VBox textVBox;
     private HBox buttonHBox;
     private VBox buttonAndText;
+    private HBox timeHBox;
 
     private StackPane root;
     
@@ -40,7 +42,8 @@ public class MusicPlayerPage {
         
         // ====TIME TEXT====
         currentTime = new Text("0:00");
-        totalTime = new Text("0:00");
+        totalTime = new Text(music.getSongLength());
+        timeSlash = new Text("/");
         
         
         // ====BUTTONS====
@@ -49,7 +52,7 @@ public class MusicPlayerPage {
         nextButton.setOnAction(value -> {
             // Play next song
             music.playNext();
-            updateSongName(music.getSongName());
+            updateSong(music.getSongName(), music.getSongLength());
             
             buttonVisibility(music);
         });
@@ -61,7 +64,7 @@ public class MusicPlayerPage {
         previousButton.setOnAction(value -> {
             // Play previous song
             music.playPrevious();
-            updateSongName(music.getSongName());
+            updateSong(music.getSongName(), music.getSongLength());
             
             buttonVisibility(music);
         });
@@ -77,24 +80,42 @@ public class MusicPlayerPage {
         textVBox.setAlignment(Pos.BASELINE_CENTER);
         textVBox.setSpacing(10);
         
-        // Button + Text
-        buttonAndText = new VBox(textVBox, buttonHBox);
-        buttonAndText.setMargin(textVBox, new Insets(0, 0, 30, 0));
+        // Time HBox
+        timeHBox = new HBox(currentTime, timeSlash, totalTime);
+        timeHBox.setAlignment(Pos.BASELINE_CENTER);
+        
+        // Button + Text + Time
+        buttonAndText = new VBox(textVBox, buttonHBox, timeHBox);
+        VBox.setMargin(textVBox, new Insets(0, 0, 30, 0));
+        VBox.setMargin(timeHBox, new Insets(30, 0, 0, 0));
+        
         
         // Root
         root = new StackPane();
-        root.getChildren().addAll(buttonAndText, currentTime);
+        root.getChildren().addAll(buttonAndText);
         StackPane.setAlignment(buttonAndText, Pos.CENTER);
+        //StackPane.setAlignment(timeHBox, Pos.CENTER);
         //root.getChildren().addAll(textVBox, buttonHBox);
         //StackPane.setAlignment(textVBox, Pos.CENTER);
         //StackPane.setAlignment(buttonHBox, Pos.CENTER);
     }
     
+    public void updateSong(String songName, String songLength)
+    {
+        setSongName(songName);
+        setSongLength(songLength);
+    }
+    
     // Updates songName text to display specified song name
     // @param String - song name
-    public void updateSongName(String name)
+    public void setSongName(String name)
     {
         songName.setText(name);
+    }
+    
+    public void setSongLength(String songLength)
+    {
+        totalTime.setText(songLength);
     }
     
     // Controls button visibility
@@ -107,7 +128,7 @@ public class MusicPlayerPage {
         previousButton.setVisible(!music.playlistAtBeginning());
     }
     
-    public void updateTime(String time)
+    public void updateCurrentTime(String time)
     {
         currentTime.setText(time);
     }
