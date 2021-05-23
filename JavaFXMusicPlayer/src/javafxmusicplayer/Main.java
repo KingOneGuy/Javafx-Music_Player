@@ -30,6 +30,7 @@ public class Main extends Application {
         if(music.playlistExists())
         {
             music.play();
+            music.setVolume(.1);
         }
         
         primaryStage.setScene(page.getPage());

@@ -1,6 +1,7 @@
 package javafxmusicplayer;
 
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
 
 /**
@@ -19,7 +20,7 @@ public class MusicController {
         this.playlist = playlist;
         playlist.randomize();
         mediaPlayer = new MediaPlayer(playlist.current());
-        setTimeListener();
+        initializeFunctions();
     }
     
     // Creates new MusicController using given playlist. Randomizes playlist based on given boolean.
@@ -30,7 +31,7 @@ public class MusicController {
         this.playlist = playlist;
         if(randomize) { playlist.randomize(); }
         mediaPlayer = new MediaPlayer(playlist.current());
-        setTimeListener();
+        initializeFunctions();
     }
     
     // Sets the page the controller will display on. Necessary to update NowPlaying text.
@@ -38,12 +39,18 @@ public class MusicController {
     public void setPage(MusicPlayerPage page)
     {
         this.page = page;
+        setOnReady();
     }
     
     // Plays the media
     public void play()
     {
         mediaPlayer.play();
+    }
+    
+    void setVolume(double volume)
+    {
+        mediaPlayer.setVolume(volume);
     }
     
     // Plays the next song and automatically updates position in playlist
@@ -100,13 +107,30 @@ public class MusicController {
     
     String getSongLength()
     {
-        return durationToString(mediaPlayer.getTotalDuration());
+        if(mediaPlayer.getStatus() == Status.UNKNOWN) // Unreliable property
+        {
+            return "0:00";
+        }
+        else
+        {
+            return durationToString(mediaPlayer.totalDurationProperty().get());
+        }
     }
     
     private String durationToString(Duration duration)
     {
         int totalSeconds = (int) duration.toSeconds();
-        return (totalSeconds / 60) + ":" + (totalSeconds % 60);
+        String output = (totalSeconds / 60) + ":";
+        if(totalSeconds % 60 < 10) { output += "0"; }
+        output += totalSeconds % 60;
+        return output;
+    }
+    
+    private void setOnReady()
+    {
+        mediaPlayer.setOnReady(() -> {
+            page.setSongLength(getSongLength());
+        });
     }
     
     // Sets the MediaPlayer to automaticaly play the next song at song end
@@ -117,7 +141,6 @@ public class MusicController {
             if(!playlistAtEnd())
             {
                 playNext();
-                page.setSongName(getSongName());
                 page.updateSong(getSongName(), getSongLength());
                 page.buttonVisibility(this);
             }
@@ -133,6 +156,7 @@ public class MusicController {
     
     private void initializeFunctions()
     {
+        if(page != null) { setOnReady(); }
         setOnEnd();
         setTimeListener();
     }

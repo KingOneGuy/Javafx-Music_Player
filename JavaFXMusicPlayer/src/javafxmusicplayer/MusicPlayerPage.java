@@ -29,8 +29,9 @@ public class MusicPlayerPage {
     
     private VBox textVBox;
     private HBox buttonHBox;
-    private VBox buttonAndText;
     private HBox timeHBox;
+    
+    private VBox playerGUI;
 
     private StackPane root;
     
@@ -42,7 +43,7 @@ public class MusicPlayerPage {
         
         // ====TIME TEXT====
         currentTime = new Text("0:00");
-        totalTime = new Text(music.getSongLength());
+        totalTime = new Text("0:00");
         timeSlash = new Text("/");
         
         
@@ -84,16 +85,16 @@ public class MusicPlayerPage {
         timeHBox = new HBox(currentTime, timeSlash, totalTime);
         timeHBox.setAlignment(Pos.BASELINE_CENTER);
         
-        // Button + Text + Time
-        buttonAndText = new VBox(textVBox, buttonHBox, timeHBox);
+        // Player GUI (Text, Buttons, Time)
+        playerGUI = new VBox(textVBox, buttonHBox, timeHBox);
         VBox.setMargin(textVBox, new Insets(0, 0, 30, 0));
         VBox.setMargin(timeHBox, new Insets(30, 0, 0, 0));
         
         
         // Root
         root = new StackPane();
-        root.getChildren().addAll(buttonAndText);
-        StackPane.setAlignment(buttonAndText, Pos.CENTER);
+        root.getChildren().addAll(playerGUI);
+        StackPane.setAlignment(playerGUI, Pos.CENTER);
         //StackPane.setAlignment(timeHBox, Pos.CENTER);
         //root.getChildren().addAll(textVBox, buttonHBox);
         //StackPane.setAlignment(textVBox, Pos.CENTER);
