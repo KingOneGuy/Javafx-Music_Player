@@ -18,10 +18,14 @@ public class MusicPlayerPage {
     private final int WINDOW_WIDTH = 400; // Width of window
     private final int WINDOW_HEIGHT = 400; // Height of window
     
+    private final MusicController music;
+    
     private Text nowPlaying; // Displays "Now Playing:"
     private Text songName; // The name of current song
     private Button nextButton; // Button to play next song
     private Button previousButton; // Button to play previous song
+    
+    private ControlButtons controlButtons;
     
     private Text currentTime;
     private Text totalTime;
@@ -37,6 +41,8 @@ public class MusicPlayerPage {
     
     public MusicPlayerPage(MusicController music)
     {
+        this.music = music;
+
         // ====SONG TEXT====
         nowPlaying = new Text("Now Playing:");
         songName = new Text(music.getSongName());
@@ -48,33 +54,10 @@ public class MusicPlayerPage {
         
         
         // ====BUTTONS====
-        // Next Button
-        nextButton = new Button("Next");
-        nextButton.setOnAction(value -> {
-            // Play next song
-            music.playNext();
-            updateSong(music.getSongName(), music.getSongLength());
-            
-            buttonVisibility(music);
-        });
-        
-        // Previous Button
-        previousButton = new Button("Previous");
-        previousButton.setVisible(false);
-        
-        previousButton.setOnAction(value -> {
-            // Play previous song
-            music.playPrevious();
-            updateSong(music.getSongName(), music.getSongLength());
-            
-            buttonVisibility(music);
-        });
+        controlButtons = new ControlButtons(this, music);
         
         // Button HBox
-        buttonHBox = new HBox(previousButton, nextButton);
-        buttonHBox.setLayoutY(50);
-        buttonHBox.setMargin(previousButton, new Insets(0, 50, 0, 0));
-        buttonHBox.setAlignment(Pos.BASELINE_CENTER);
+        buttonHBox = controlButtons.getButtons();
         
         // Text VBox
         textVBox = new VBox(nowPlaying, songName);
@@ -123,10 +106,9 @@ public class MusicPlayerPage {
     // If the playlist is at the beginning, hides the previous button
     // If the playlist is at the end, hides the next button
     // @param MusicController music - MusicController to read playlist info from
-    public void buttonVisibility(MusicController music)
+    public void buttonVisibility()
     {
-        nextButton.setVisible(!music.playlistAtEnd());
-        previousButton.setVisible(!music.playlistAtBeginning());
+        controlButtons.buttonVisibility();
     }
     
     public void updateCurrentTime(String time)

@@ -6,6 +6,7 @@
 package javafxmusicplayer;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -27,30 +28,40 @@ public class Main extends Application {
     {
         setUp(primaryStage);
         
-        if(music.playlistExists())
+        if(music != null && music.playlistExists())
         {
             music.play();
-            music.setVolume(.1);
+            
+            primaryStage.setScene(page.getPage());
+            primaryStage.setTitle("Music Player");
+            primaryStage.show();
+        }
+        else
+        {
+            Platform.exit();
         }
         
-        primaryStage.setScene(page.getPage());
-        primaryStage.setTitle("Music Player");
-        primaryStage.show();
     }
     
     // Initializes music and page
     private void setUp(Stage primaryStage)
     {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        Playlist playlist = new Playlist(directoryChooser.showDialog(primaryStage));
-        
-        if(playlist.exists())
+        try
         {
-            music = new MusicController(playlist);
-            page = new MusicPlayerPage(music);
-            music.setPage(page);
+            Playlist playlist = new Playlist(directoryChooser.showDialog(primaryStage));
+            if(playlist.exists())
+            {
+                music = new MusicController(playlist);
+                page = new MusicPlayerPage(music);
+                music.setPage(page);
+            }
+            else
+            {
+                throw new IllegalArgumentException();
+            }
         }
-        else
+        catch(Exception e)
         {
             System.out.println("Playlist doesn't exist.");
         }

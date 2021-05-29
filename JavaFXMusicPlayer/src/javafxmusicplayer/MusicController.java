@@ -48,6 +48,11 @@ public class MusicController {
         mediaPlayer.play();
     }
     
+    void pause()
+    {
+        mediaPlayer.pause();
+    }
+    
     void setVolume(double volume)
     {
         mediaPlayer.setVolume(volume);
@@ -142,7 +147,7 @@ public class MusicController {
             {
                 playNext();
                 page.updateSong(getSongName(), getSongLength());
-                page.buttonVisibility(this);
+                page.buttonVisibility();
             }
         });
     }
@@ -159,5 +164,6 @@ public class MusicController {
         if(page != null) { setOnReady(); }
         setOnEnd();
         setTimeListener();
+        setVolume(.1);
     }
 }
