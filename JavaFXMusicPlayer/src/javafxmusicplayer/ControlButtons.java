@@ -56,7 +56,7 @@ class ControlButtons {
         // Pause Button
         pauseButton = new Button("||");
         pauseButton.setOnAction(value -> {
-            if(pauseButton.getText() == "||") // Pause
+            if(pauseButton.getText().equals("||")) // Pause
             {
                 pauseButton.setText(">");
                 music.pause();
